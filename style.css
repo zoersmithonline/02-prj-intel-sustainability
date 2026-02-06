@@ -1,1 +1,163 @@
-/* Add your CSS here */
+/* =========================
+   Global Styles
+========================= */
+
+:root {
+  --intel-blue: #0068b5;
+  --light-gray: #f4f6f8;
+  --dark-gray: #333;
+  --card-bg: #ffffff;
+  --line-color: #cfd8dc;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--dark-gray);
+  background-color: var(--light-gray);
+  line-height: 1.6;
+}
+
+/* =========================
+   Header / Hero Section
+========================= */
+
+header {
+  background: linear-gradient(135deg, #0068b5, #004a87);
+  padding: 4.5rem 1rem;
+  text-align: center;
+  color: white;
+}
+
+header img {
+  width: 130px;
+  margin-bottom: 1.5rem;
+}
+
+header h1 {
+  font-size: 2.6rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+header p {
+  max-width: 720px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  color: #e6f0f8;
+}
+
+/* =========================
+   Timeline Layout
+========================= */
+
+section {
+  position: relative;
+  max-width: 1000px;
+  margin: 4rem auto;
+  padding: 2rem 1rem;
+}
+
+/* Vertical timeline line */
+section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 100%;
+  background-color: var(--line-color);
+}
+
+/* =========================
+   Timeline Cards
+========================= */
+
+section > div {
+  background: var(--card-bg);
+  width: 45%;
+  padding: 1.5rem;
+  border-radius: 8px;
+  position: relative;
+  margin: 2rem 0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Alternate left / right */
+section > div:nth-child(odd) {
+  margin-left: auto;
+}
+
+section > div:nth-child(even) {
+  margin-right: auto;
+}
+
+/* Timeline dots */
+section > div::before {
+  content: "";
+  position: absolute;
+  top: 1.5rem;
+  width: 14px;
+  height: 14px;
+  background-color: var(--intel-blue);
+  border-radius: 50%;
+}
+
+section > div:nth-child(odd)::before {
+  left: -42px;
+}
+
+section > div:nth-child(even)::before {
+  right: -42px;
+}
+
+section h2 {
+  margin: 0;
+  color: var(--intel-blue);
+  font-size: 1.6rem;
+}
+
+section h3 {
+  margin-top: 0.25rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+section p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* Hover effects */
+section > div:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================
+   Mobile Styles
+========================= */
+
+@media (max-width: 768px) {
+  section::before {
+    left: 8px;
+  }
+
+  section > div {
+    width: 100%;
+    margin-left: 2rem !important;
+  }
+
+  section > div::before {
+    left: -26px !important;
+    right: auto;
+  }
+}

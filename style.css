@@ -58,106 +58,151 @@ header p {
 ========================= */
 
 section {
+  display: flex;
+  gap: 2rem;
+  overflow-x: auto;
+  padding: 3rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  scroll-snap-type: x mandatory;
   position: relative;
-  max-width: 1000px;
-  margin: 4rem auto;
-  padding: 2rem 1rem;
 }
 
-/* Vertical timeline line */
-section::before {
+section::after {
   content: "";
   position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 4px;
-  height: 100%;
+  top: 50%;
+  left: 0;
+  height: 4px;
+  width: 100%;
   background-color: var(--line-color);
+  z-index: 0;
 }
 
-/* =========================
-   Timeline Cards
-========================= */
+/* ========================= 
+   Timeline Cards 
+========================= */ 
 
-section > div {
+.timeline-card {
+  flex: 0 0 auto;
+  width: 280px;
+  aspect-ratio: 1 / 1;
   background: var(--card-bg);
-  width: 45%;
   padding: 1.5rem;
   border-radius: 8px;
-  position: relative;
-  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  scroll-snap-align: start;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Alternate left / right */
-section > div:nth-child(odd) {
-  margin-left: auto;
-}
-
-section > div:nth-child(even) {
-  margin-right: auto;
-}
-
-/* Timeline dots */
-section > div::before {
-  content: "";
-  position: absolute;
-  top: 1.5rem;
-  width: 14px;
-  height: 14px;
-  background-color: var(--intel-blue);
-  border-radius: 50%;
-}
-
-section > div:nth-child(odd)::before {
-  left: -42px;
-}
-
-section > div:nth-child(even)::before {
-  right: -42px;
-}
-
-section h2 {
-  margin: 0;
-  color: var(--intel-blue);
-  font-size: 1.6rem;
-}
-
-section h3 {
-  margin-top: 0.25rem;
-  margin-bottom: 0.75rem;
-  font-weight: 600;
-}
-
-section p {
-  margin: 0;
-  font-size: 0.95rem;
-}
-
-/* Hover effects */
-section > div:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 1;
 }
 
 /* =========================
-   Mobile Styles
+   Image Hover Overlay (Option 4)
 ========================= */
 
+.image-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.image-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 104, 181, 0.6);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.image-wrapper:hover img {
+  transform: scale(1.1);
+}
+
+.image-wrapper:hover .image-overlay {
+  opacity: 1;
+}
+
+/* =========================
+   Card Text
+========================= */
+
+.timeline-card h2 { 
+  margin: 0; 
+  color: var(--intel-blue); 
+  font-size: 1.6rem; 
+} 
+
+.timeline-card h3 { 
+  margin-top: 0.25rem; 
+  margin-bottom: 0.75rem; 
+  font-weight: 600; 
+} 
+
+.timeline-card p { 
+  margin: 0; 
+  font-size: 0.95rem; 
+} 
+
+/* Hover effects for entire card */
+.timeline-card:hover { 
+  transform: translateY(-6px); 
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.15); 
+} 
+
+/* =========================
+   Bottom Info Text
+========================= */
+
+body > p { 
+  text-align: center; 
+  margin: 2.5rem auto; 
+  font-size: 0.9rem; 
+  color: #666; 
+  letter-spacing: 0.3px; 
+  opacity: 0.85; 
+} 
+
+/* ========================= 
+   Mobile Styles 
+========================= */ 
+
 @media (max-width: 768px) {
-  section::before {
-    left: 8px;
+  section {
+    max-width: 100%;
+    padding: 2rem 1rem;
   }
 
-  section > div {
-    width: 100%;
-    margin-left: 2rem !important;
+  .timeline-card {
+    width: 220px;
+    aspect-ratio: 4 / 5;
   }
 
-  section > div::before {
-    left: -26px !important;
-    right: auto;
+  .image-wrapper {
+    margin-bottom: 0.75rem;
+  }
+
+  .image-overlay {
+    font-size: 1.4rem;
   }
 }

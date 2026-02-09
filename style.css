@@ -30,6 +30,8 @@ body {
 
 header {
   background: linear-gradient(135deg, #0068b5, #004a87);
+  background: linear-gradient(135deg, #0068b5, #004a87), radial-gradient(circle at top right, rgba(255,255,255,0.15), transparent 70%);
+  background-blend-mode: overlay;
   padding: 4.5rem 1rem;
   text-align: center;
   color: white;
@@ -66,109 +68,69 @@ section {
   margin: 0 auto;
   scroll-snap-type: x mandatory;
   position: relative;
+  align-items: flex-start; /* prevents cards from all stretching */
 }
-
-section::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  height: 4px;
-  width: 100%;
-  background-color: var(--line-color);
-  z-index: 0;
-}
-
-/* ========================= 
-   Timeline Cards 
-========================= */ 
 
 .timeline-card {
   flex: 0 0 auto;
   width: 280px;
-  aspect-ratio: 1 / 1;
   background: var(--card-bg);
   padding: 1.5rem;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   scroll-snap-align: start;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   z-index: 1;
+  min-height: 360px; 
+
+  /* new for isolated hover expansion */
+  transition: box-shadow 0.5s ease, transform 0.3s ease;
+  height: auto;               /* let each card size itself */
 }
 
-/* =========================
-   Image Hover Overlay (Option 4)
-========================= */
-
-.image-wrapper {
-  position: relative;
-  overflow: hidden;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-}
-
-.image-wrapper img {
+/* Timeline card images */
+.timeline-card img {
   width: 100%;
   height: auto;
   display: block;
+  border-radius: 8px; /* adjust this value for more/less rounding */
   transition: transform 0.5s ease;
 }
 
-.image-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 104, 181, 0.6);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.8rem;
-  font-weight: bold;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.image-wrapper:hover img {
-  transform: scale(1.1);
-}
-
-.image-wrapper:hover .image-overlay {
-  opacity: 1;
-}
-
-/* =========================
-   Card Text
-========================= */
 
 .timeline-card h2 { 
-  margin: 0; 
+  margin: 0 0 0.5rem 0;
   color: var(--intel-blue); 
-  font-size: 1.6rem; 
-} 
-
-.timeline-card h3 { 
-  margin-top: 0.25rem; 
-  margin-bottom: 0.75rem; 
-  font-weight: 600; 
+  font-size: 1.4rem; 
 } 
 
 .timeline-card p { 
-  margin: 0; 
-  font-size: 0.95rem; 
-} 
+  margin: 0;
+  font-size: 0.95rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;      /* only show 3 lines by default */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: max-height 0.5s ease;
+  max-height: 4.5em;          /* roughly 3 lines height */
+}
 
-/* Hover effects for entire card */
+/* hover effects for only the hovered card */
 .timeline-card:hover { 
   transform: translateY(-6px); 
-  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.15); 
-} 
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.15);
+  z-index: 10;                 /* bring hovered card above others */
+}
+
+.timeline-card:hover p {
+  -webkit-line-clamp: unset;   /* remove line clamp */
+  max-height: 1000px;           /* let paragraph expand fully */
+  overflow: visible;
+}
 
 /* =========================
    Bottom Info Text
@@ -184,25 +146,100 @@ body > p {
 } 
 
 /* ========================= 
-   Mobile Styles 
+   Mobile Styles — Vertical Timeline
 ========================= */ 
 
 @media (max-width: 768px) {
+
   section {
-    max-width: 100%;
-    padding: 2rem 1rem;
+    flex-direction: column;
+    overflow-x: hidden;
+    gap: 2rem;
+    padding: 2.5rem 1.25rem;
+    position: relative;
+  }
+
+  /* Vertical timeline line */
+  section::after {
+    top: 0;
+    left: 22px;
+    width: 4px;
+    height: 100%;
+    background-color: var(--line-color);
   }
 
   .timeline-card {
-    width: 220px;
-    aspect-ratio: 4 / 5;
+    width: 100%;
+    aspect-ratio: auto;
+    padding: 1.5rem 1.5rem 1.5rem 2.5rem;
+    position: relative;
+  }
+
+  /* Timeline dot */
+  .timeline-card::before {
+    content: "";
+    position: absolute;
+    top: 1.5rem;
+    left: 12px;
+    width: 16px;
+    height: 16px;
+    background-color: var(--intel-blue);
+    border-radius: 50%;
+    z-index: 2;
   }
 
   .image-wrapper {
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
   }
 
   .image-overlay {
     font-size: 1.4rem;
   }
+
+  body > p {
+    display: none;
+  }
+
+  /* Always show date on mobile */
+.image-overlay {
+  opacity: 1;
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  width: auto;
+  height: auto;
+  padding: 0.4rem 0.75rem;
+  background-color: var(--intel-blue);
+  font-size: 0.9rem;
+  border-radius: 4px;
+}
+
+/* Disable hover scaling on mobile */
+.image-wrapper:hover img {
+  transform: none;
+}
+
+/* Mobile hero spacing & typography */
+header {
+  padding: 3rem 1.25rem;
+}
+
+header img {
+  width: 100px;
+  margin-bottom: 1rem;
+}
+
+header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+header p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+header > div {
+  padding: 0 1.5rem;
+}
 }
